@@ -248,7 +248,12 @@ function logError(context, error){
 
   do {
       try {
-          const response = await got(`${sonarBaseURL}/api/rules/search?activation=true&f=name,htmlDesc,severity&ps=${pageSize}&p=${page}${filterRule}`, {
+          let ruleProps = ['name', 'severity'];
+          if (!data.noRulesInReport) {
+              ruleProps.push('htmlDesc');
+          }
+          ruleProps = ruleProps.join(',');
+          const response = await got(`${sonarBaseURL}/api/rules/search?activation=true&f=${ruleProps}&ps=${pageSize}&p=${page}${filterRule}`, {
               agent,
               headers
           });
