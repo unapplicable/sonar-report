@@ -343,7 +343,7 @@ const hotspotLink = argv.linkIssues == 'true' ?
       page = 1;
       do {
         try {
-            const response = await got(`${sonarBaseURL}/api/hotspots/search?projectKey=${sonarComponent}${filterHotspots}&ps=${pageSize}&p=${page}&statuses=${HOTSPOT_STATUSES}`, {
+            const response = await got(`${sonarBaseURL}/api/hotspots/search?projectKey=${sonarComponent}${filterHotspots}${leakPeriodFilter}&ps=${pageSize}&p=${page}&statuses=${HOTSPOT_STATUSES}`, {
                 agent,
                 headers
             });
