@@ -258,6 +258,8 @@ const hotspotLink = argv.linkIssues == 'true' ?
 
   {
     const pageSize = 500;
+    const maxResults = 10000;
+    const maxPage = maxResults / pageSize;
     let page = 1;
     let nbResults;
 
@@ -283,11 +285,13 @@ const hotspotLink = argv.linkIssues == 'true' ?
           logError("getting rules", error);
           return null;
       }
-    } while (nbResults === pageSize);
+    } while (nbResults === pageSize && page <= maxPage);
   }
 
   {
     const pageSize = 500;
+    const maxResults = 10000;
+    const maxPage = maxResults / pageSize;
     let page = 1;
     let nbResults;
     /** Get all statuses except "REVIEWED". 
@@ -331,7 +335,7 @@ const hotspotLink = argv.linkIssues == 'true' ?
         logError("getting issues", error);  
           return null;
       }
-    } while (nbResults === pageSize);
+    } while (nbResults === pageSize && page <= maxPage);
 
     let hSeverity = "";
     if (version >= "8.1" && !data.noSecurityHotspot) {
@@ -351,7 +355,7 @@ const hotspotLink = argv.linkIssues == 'true' ?
           logError("getting hotspots list", error);  
             return null;
         }
-      } while (nbResults === pageSize);
+      } while (nbResults === pageSize && page <= maxPage);
 
       // 2) Getting hotspots details with hotspots/show
       for (let hotspotKey of data.hotspotKeys){
