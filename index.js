@@ -72,6 +72,12 @@ DESCRIPTION
     --qualityGateStatus
         Set this flag to include quality gate status in the report. Default is false
         
+    --vulnerabilityPhrase
+        Set to override 'Vulnerability' phrase in the report. Default 'Vulnerability'
+            
+    --vulnerabilityPluralPhrase
+        Set to override 'Vulnerabilities' phrase in the report. Default 'Vulnerabilities'    
+    
     --help
         display this help message`);
   process.exit();
@@ -121,6 +127,8 @@ const hotspotLink = argv.linkIssues == 'true' ?
     fixMissingRule: (argv.fixMissingRule == 'true'),
     noSecurityHotspot: (argv.noSecurityHotspot == 'true'),
     noRulesInReport: (argv.noRulesInReport == 'true'),
+    vulnerabilityPhrase: argv.vulnerabilityPhrase || 'Vulnerability',
+    vulnerabilityPluralPhrase: argv.vulnerabilityPluralPhrase || 'Vulnerabilities',
     // sonar URL without trailing /
     sonarBaseURL: argv.sonarurl.replace(/\/$/, ""),
     sonarComponent: argv.sonarcomponent,
