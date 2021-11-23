@@ -69,6 +69,9 @@ DESCRIPTION
     --linkIssues
         Set this flag to create links to Sonar from reported issues
         
+    --qualityGateStatus
+        Set this flag to include quality gate status in the report. Default is false
+        
     --help
         display this help message`);
   process.exit();
@@ -254,6 +257,28 @@ const hotspotLink = argv.linkIssues == 'true' ?
     if (json.settings[0]) {
       data.previousPeriod = json.settings[0].value;
     }
+  }
+
+  if (argv.qualityGateStatus === 'true') {
+      try {
+          const response = await got(`${sonarBaseURL}/api/qualitygates/project_status?projectKey=${sonarComponent}`, {
+              agent,
+              headers
+          });
+          const json = JSON.parse(response.body);
+          if (json.projectStatus.conditions) {
+              for (const condition of json.projectStatus.conditions) {
+                  condition.metricKey = condition.metricKey.replace(/_/g, " ");
+              }
+          }
+          data.qualityGateStatus = json;
+          if (!data.releaseName) {
+              data.releaseName = json.projectStatus.period.parameter;
+          }
+      } catch (error) {
+          logError("getting quality gate status", error);
+          return null;
+      }
   }
 
   {
