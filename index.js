@@ -80,7 +80,10 @@ DESCRIPTION
         Set to override 'Vulnerabilities' phrase in the report. Default 'Vulnerabilities'
         
     --stylesheet
-        Output css stylesheet    
+        Output css stylesheet
+    
+    --saveReportJson
+        Save the report data in JSON format. Set to target file name. Default disabled    
     
     --help
         display this help message`);
@@ -125,7 +128,6 @@ const hotspotLink = argv.linkIssues == 'true' ?
   var hotspotSeverities = {"HIGH": "CRITICAL", "MEDIUM": "MAJOR", "LOW": "MINOR"};
 
   const data = {
-    stylesheet: stylesheet,
     date: new Date().toDateString(),
     projectName: argv.project,
     applicationName: argv.application,
@@ -447,7 +449,11 @@ const hotspotLink = argv.linkIssues == 'true' ?
     };
   }
 
-  ejs.renderFile(`${__dirname}/index.ejs`, data, {}, (err, str) => {
+  if (argv.saveReportJson) {
+      await fs.writeFile(argv.saveReportJson, JSON.stringify(data));
+  }
+
+  ejs.renderFile(`${__dirname}/index.ejs`, {...data, stylesheet}, {}, (err, str) => {
     console.log(str);
   });
 })();
