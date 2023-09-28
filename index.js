@@ -151,7 +151,7 @@ const hotspotLink = argv.linkIssues == 'true' ?
     hotspotKeys: []
   };
 
-  const leakPeriodFilter = data.sinceLeakPeriod ? '&sinceLeakPeriod=true' : '';
+  const leakPeriodFilter = data.sinceLeakPeriod ? '&sinceLeakPeriod=true&inNewCodePeriod=true' : '';
   data.deltaAnalysis = data.sinceLeakPeriod ? 'Yes' : 'No';
   const sonarBaseURL = data.sonarBaseURL;
   const sonarComponent = data.sonarComponent;
@@ -389,7 +389,7 @@ const hotspotLink = argv.linkIssues == 'true' ?
       page = 1;
       do {
         try {
-            const response = await got(`${sonarBaseURL}/api/hotspots/search?projectKey=${sonarComponent}${filterHotspots}${leakPeriodFilter}&ps=${pageSize}&p=${page}&statuses=${HOTSPOT_STATUSES}`, {
+            const response = await got(`${sonarBaseURL}/api/hotspots/search?projectKey=${sonarComponent}${filterHotspots}${leakPeriodFilter}&ps=${pageSize}&p=${page}&statuses=${HOTSPOT_STATUSES}&status=${HOTSPOT_STATUSES}`, {
                 agent,
                 headers
             });
